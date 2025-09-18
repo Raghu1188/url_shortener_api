@@ -4,4 +4,7 @@ Rails.application.routes.draw do
       resources :urls, only: [:create]
     end
   end
+
+  get '/:short_code', to: 'api/v1/urls#redirect'
+
 end

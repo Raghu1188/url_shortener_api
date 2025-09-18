@@ -1,4 +1,5 @@
 class Api::V1::UrlsController < ApplicationController
+	before_action :find_url, only: [:redirect]
 
 	def create
     url = Url.new(url_params)
@@ -9,9 +10,26 @@ class Api::V1::UrlsController < ApplicationController
     end
   end
 
+  def redirect
+    if @url
+      redirect_to @url.original_url, allow_other_host: true
+    else
+      render json: { error: 'URL not found' }, status: :not_found
+    end
+  end
+
   private
 
   def url_params
     params.require(:url).permit(:original_url)
   end
+
+  def find_url
+    @url = Url.find_by(short_code: params[:short_code])
+  end
+
+  def short_url(code)
+    "#{request.base_url}/#{code}"
+  end
+
 end
