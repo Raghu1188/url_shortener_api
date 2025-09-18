@@ -1,4 +1,5 @@
 class Api::V1::UrlsController < ApplicationController
+	before_action :authenticate_client!, only: [:create]
 	before_action :find_url, only: [:redirect]
 
 	def create
